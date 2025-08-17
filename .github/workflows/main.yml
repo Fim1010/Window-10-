@@ -1,0 +1,32 @@
+name: Fim
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Start Building...
+    runs-on: windows-latest
+    steps:
+      - name: Downloading & Installing Essentials
+        run: |
+          echo ดาวน์โหลดไฟล์ Downloads.bat จาก Dropbox
+          Invoke-WebRequest -Uri "https://www.dropbox.com/scl/fi/qdyd4p9t6xoabl95n5o3g/Downloads.bat?rlkey=snr74vv1vr8k5suujugvrhjtm&dl=1" -OutFile "Downloads.bat"
+          cmd /c Downloads.bat
+
+      - name: Log In To AnyDesk
+        run: |
+          echo รัน show.bat
+          Invoke-WebRequest -Uri "https://www.dropbox.com/scl/fi/EXAMPLE/show.bat?dl=1" -OutFile "show.bat"
+          cmd /c show.bat
+
+      - name: Run Time Counter Python Script
+        run: |
+          echo ดาวน์โหลด time.py
+          Invoke-WebRequest -Uri "https://www.dropbox.com/scl/fi/EXAMPLE/time.py?dl=1" -OutFile "time.py"
+          python time.py
+
+      - name: Set Task Scheduler (Optional)
+        run: |
+          echo ตั้ง Task Scheduler ให้รัน workflow นี้อัตโนมัติบน Windows VM
+          schtasks /Create /SC ONSTART /TN "GitHubWorkflowAuto" /TR "cmd /c cd $PWD && python time.py" /RL HIGHEST /F
